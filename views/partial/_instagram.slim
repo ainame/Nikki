@@ -1,0 +1,21 @@
+#instagram
+  #instagram-label.partial-label.btn  Instagram
+  #instagram-container.partial-container.padding-media-grid style="display:none;"
+    - unless session[:instagram]
+      .login-box
+        a href="/auth/instagram" Instagramへログイン
+    - else
+      ul.media-grid
+        - photos.each do |photo|
+          li
+            .selectable-photo
+              a href="#"
+                img src=photo["thumbnail"]["url"] width="45" height="45"
+                javascript:
+                  photo_url["#{{photo['thumbnail']['url']}}"] = "#{{photo['standard_resolution']['url']}}"
+      a href="/signout/instagram" Instagramをログアウト
+
+javascript:
+  $("#instagram-label").click(function(){
+    $("#instagram-container").toggle("fast");
+  });

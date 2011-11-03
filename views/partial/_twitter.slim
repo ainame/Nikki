@@ -1,0 +1,17 @@
+#twitter
+  #twitter-label.partial-label.btn Twitter
+  #twitter-container.partial-container style="display:none;"
+    - unless session[:twitter]
+      .login-box
+        a href="/auth/twitter" Twitterへログイン
+    - else
+      ul.timeline.unstyled
+        - timeline.each do |t|
+          li.tweet.tweet-twitter.selectable-tweet
+            == t.text
+      br
+      a href="/signout/twitter" Twitterをログアウト
+javascript:
+  $("#twitter-label").click(function(){
+    $("#twitter-container").toggle("fast");
+  });

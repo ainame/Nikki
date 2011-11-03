@@ -1,0 +1,52 @@
+doctype 5
+html
+  head    
+    link rel="stylesheet" href="stylesheet/bootstrap.css"
+    link rel="stylesheet" href="stylesheet/main.css"
+    script type="text/javascript" src="javascript/my.js"
+    script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+    script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"
+    script type="text/javascript" src="javascript/jquery.ui.draggable.js"
+    script type="text/javascript" src="javascript/jquery.ui.droppable.js"
+    script type="text/javascript" src="http://platform.twitter.com/anywhere.js?id=yyyfn1Rm0onD0uKUNSx2dQ&v=1"
+  title
+      | Nikki
+  body
+    div.topbar
+      div.fill
+        div.container
+          h3 
+            a href="/" Nikki
+          ul
+            li 
+              a href="#" ホーム
+            li 
+              a href="#" 友だち
+            li
+              a href="#" 設定
+            - if session[:signin]
+              li
+                a href="/signout" ログアウト
+              li
+                a href="#" = session[:screen_name]
+            - else
+              li 
+                a href="/oauth" ログイン
+    div.diary
+      div.container style="margin-top:40px;"
+        == yield
+        hr.fotter-border
+        div.fotter
+          .row
+            .span5
+              h5 ナビ
+              ul
+                li
+                  a href="/about" このサイトについて
+            .span5
+              h5 その他
+              ul
+                li
+                  a href="/admin-profile" 製作者について
+            .span6
+              p

@@ -1,0 +1,10 @@
+.twitter style="padding:20px;"
+  - unless session[:twitter]
+    a href="/auth/twitter" Twitterへログイン
+  - else
+    a href="/signout/twitter" Twitterをログアウト
+    br
+    .timeline style="overflow:scroll;height:200px;"
+      - timeline.each do |t|
+        .tweet style="border-left:black 1px solid; margin-bottom:5px;padding-left:5px;"
+        == t.text

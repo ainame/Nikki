@@ -1,0 +1,11 @@
+#mixi-voice
+  div id="mixi-voice-label" class="partial-label btn" mixiボイス
+  div#mixi-voice-container class="partial-container" style="display:none;"
+    .timeline
+      - timeline.each do |voice|
+        .tweet.tweet-mixi.selectable-tweet
+          span == voice["text"]
+javascript:
+  $("#mixi-voice-label").click(function(){
+    $("#mixi-voice-container").toggle("fast");
+  });

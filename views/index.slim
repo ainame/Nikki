@@ -1,0 +1,96 @@
+javascript:
+  var num_attach_photo = 0;
+  var photo_url = {};
+  var get_large_url = function(key){
+    return photo_url[key];
+  }
+  var attached_urls = [];
+
+.row
+  - if session[:signin]
+    .span10.columns
+      #notification-area
+        == flash_tag :notice 
+        == flash_tag :error      
+      == form_tag '/submit', :id => 'entry' do
+        == field_set_tag do
+          .clearfix
+            .padding-20px-lr
+              == label_tag :title, :caption => 'タイトル'
+              br
+              br
+              .input
+                == text_field_tag :title, :name => 'title', :class => 'xxlarge', :size => 30
+            .clearfix
+              .padding-20px-lr
+                == label_tag :body, :caption => '本文'
+                br
+                br
+                .input
+                  == text_area_tag :body, :id=> 'diary-body',:class => 'xxlarge', :rows => '20'
+            #attach_photo_paths
+            / ここに添付するための写真のパスがhiddenで追加される
+          .actions
+            .center
+              == submit_tag "投稿する",:id => "submit" , :class => 'btn'
+    .span6.columns
+      .multi-service-clumn
+        #partial-title
+          span#partial-title-logo == @partial_title
+        ul id="partial-ul" class="unstyled"
+          li class="partial-li" == partial 'partial/twitter',    :engine => :slim, :locals => { :timeline => @twitter }      
+          li class="partial-li" == partial 'partial/instagram',  :engine => :slim, :locals => { :photos   => @instagram }  
+          li class="partial-li" == partial 'partial/mixi_voice', :engine => :slim, :locals => { :timeline => @mixi_voice }
+          li class="partial-li" == partial 'partial/mixi_photo', :engine => :slim, :locals => { :photos   => @mixi_photo["entry"] }
+  - else
+    p トップページ
+
+
+javascript:
+  $("#notification-area > .notice").delay(2000).fadeOut();
+  //右カラムでの画像選択時のエフェクト
+  $(function(){
+    $(".selectable-photo").toggle(
+      function(event){
+        $("a",this).first().addClass("selected-photo");
+        attached_urls[num_attach_photo++] = photo_url[$(this).find("img").attr("src")];
+      },
+      function(event){
+        $("a",this).first().removeClass("selected-photo");
+        var remove_idx = search_index(attached_urls, photo_url[event.target.src]);
+        if ( remove_idx >= 0 ){
+          attached_urls.splice(remove_idx,1);
+          num_attach_photo--;
+        } 
+      }
+    );
+    $(".selectable-tweet").click(function(event){
+      $("#diary-body").val( 
+        (function(){
+          var body = $("#diary-body").val();
+          if ( body.length == 0 ) {
+            return event.target.innerText;          
+          }
+          else {
+            return body + "\n" + event.target.innerText;
+          }
+        })()
+      );
+    });
+    //送信時の処理
+    $("form#entry").submit(function(event){
+      var list = convert_hidden_params(attached_urls).children();
+      $.each(list, function(idx, val){
+        $("#attach_photo_paths").append(val);
+      });
+      $("#diary-body").val( 
+        (function(){
+          var body = $("#diary-body").val();
+          var banner = "この日記はNikkiを用いて書きました\n"
+                     + "http://mixi-nikki.herokuapp.com/";
+          return body + "\n" + banner;
+        })()
+      );
+    });
+  });
+  

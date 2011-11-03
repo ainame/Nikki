@@ -1,0 +1,32 @@
+javascript:
+  $(function() {
+  $("#droppable_area").droppable({
+  //tolerance: "fit",
+  drop: function(event,ui) {
+  ui.draggable.find("span").clone().appendTo(this);  
+  var is_dup = $("#attach_photo_paths").children().filter(
+  function(index){
+    if( this.value == photo_url[ui.draggable.children().first()[0].src] ){
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+  if (is_dup.length == 0){ 
+    $("#attach_photo_paths").append(
+      '<input id=photo'+num_attach_photo+' name=photo'+num_attach_photo+' type=hidden>'
+    );
+    $("#photo"+num_attach_photo.toString())
+    .val(photo_url[ui.draggable.find("img").attr("src")]);
+    num_attach_photo++;
+  }
+
+  },
+  accept: '.draggable-mixi-voice,.draggable-photo'
+  });
+  });
+
+.drop_area  style="padding:20px;"
+  #droppable_area
+    p 画像を添付するにはここへドロップしてください！

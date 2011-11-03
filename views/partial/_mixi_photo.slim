@@ -1,0 +1,15 @@
+#mixi-photo
+  #mixi-photo-label.partial-label.btn mixiフォト
+  #mixi-photo-container.partial-container.padding-media-grid style="display:none;"
+    ul.media-grid
+      - photos.each do |photo|
+        li
+          .selectable-photo
+            a href="#"
+              img src=photo["thumbnailUrl"] width="45" height="45"
+              javascript:
+                photo_url["#{{photo['thumbnailUrl']}}"] = "#{{photo['url']}}";
+javascript:
+  $("#mixi-photo-label").click(function(){
+    $("#mixi-photo-container").toggle("fast");
+  });
